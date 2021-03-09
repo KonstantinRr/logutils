@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" Log cleaning functions """
+""" Logger utility functions """
 
 __author__ = "Konstantin Rolf"
 __copyright__ = "Copyright 2020, ALLTHEWAYAPP LTD"
@@ -80,13 +80,9 @@ def create_logger(stdout:bool=True, logfile:str=None, name:str='LOG', logdir:str
 
     return logger
 
-def checkArgs(data: dict):
-    checks = [("logfile", str), ("stdout", bool), ("logdir", str)]
-    argCheckRaiseIf(data, checks)
-
-
-def addLogArgs(parser, logfile:str, logname:str):
+def createParser(logfile:str, logname:str):
     # General log options
+    parser = argparse.ArgumentParser()
     parser.add_argument('--logdir', type=str, default='logs',
         help='The directory where the logs will be created (default: logs)')
     parser.add_argument('--stdout', type=bool, default=True,
@@ -96,7 +92,8 @@ def addLogArgs(parser, logfile:str, logname:str):
     parser.add_argument('--loglevel', type=str, default='DEBUG',
         help='Log level (default: DEBUG)', choices=['DEBUG', 'INFO', 'WARN'])
     parser.add_argument('--logname', type=str, default=logname,
-        help='The loggers name that is logged with every message')
+        help='The loggers name that is logged with every message.')
+    return parser
 
 def createLoggerFromArgs(args):
     levels = {
@@ -113,6 +110,9 @@ def createLoggerFromArgs(args):
         level=levels[args.loglevel], # loglevel
         name=args.logname
     )
+
+def createLoggerFromDict(args:dict):
+
 
 if __name__ == '__main__':
     print('FILE: util_logger.py')
